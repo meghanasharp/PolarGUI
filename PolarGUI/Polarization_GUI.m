@@ -1583,6 +1583,32 @@ rotate3d Off;
         grid on;
         refreshdata;
         drawnow;
+
+        % Create zoom object but set zoom to off initially
+        hZoom = zoom(ha);
+        hZoom.Enable = 'off';
+
+        % Set up the figure and callback for key presses
+        fig = ancestor(ha, 'figure'); % Get the figure handle
+        fig.UserData.hZoom = hZoom;   % Store zoom handle in figure UserData
+
+        % Create a button for toggling zoom
+        toggleButton = uicontrol('Style', 'pushbutton', 'String', 'Toggle Zoom', ...
+            'Position', [20, 20, 100, 40], 'BackgroundColor', [1, 1, 1], ...
+            'FontSize', 12, 'Callback', @(src, event) toggleZoom(fig));
+
+    end
+
+    function toggleZoom(fig)
+        % Access the zoom handle from UserData
+        hZoom = fig.UserData.hZoom;
+
+        % Toggle zoom state
+        if strcmp(hZoom.Enable, 'off')
+            hZoom.Enable = 'on';  % Enable zoom
+        else
+            hZoom.Enable = 'off'; % Disable zoom
+        end
     end
 
 %==========================================================================
